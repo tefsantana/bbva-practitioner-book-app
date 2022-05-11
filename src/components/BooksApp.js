@@ -6,7 +6,7 @@ export class BooksApp extends LitElement {
   static get properties() {
     return {
       title: { type: String },
-      books: { type: Array },
+      books: { type: Array, attribute: false },
     };
   }
 
@@ -21,8 +21,17 @@ export class BooksApp extends LitElement {
 
   constructor() {
     super();
-    this.title = 'My app';
+    this.title = 'Biblioteca virtual';
     this.books = books;
+  }
+
+  reserveBook(ev) {
+    this.books = this.books.map(book => {
+      if (book.title === ev.detail.book.title) {
+        return { ...book, available: false };
+      }
+      return book;
+    });
   }
 
   render() {
@@ -39,7 +48,8 @@ export class BooksApp extends LitElement {
           ${this.books.map(
             book =>
               html`<div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                <book-card .book="${book}"></book-card>
+                <book-card .book="${book}" @reserve-book="${this.reserveBook}">
+                </book-card>
               </div>`
           )}
         </div>

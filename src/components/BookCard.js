@@ -1,10 +1,16 @@
 import { html, LitElement } from 'lit';
 
 export class BookCard extends LitElement {
-  static properties() {
+  static get properties() {
     return {
       book: { type: Object },
     };
+  }
+
+  reserveBook() {
+    this.dispatchEvent(
+      new CustomEvent('reserve-book', { detail: { book: this.book } })
+    );
   }
 
   render() {
@@ -36,6 +42,15 @@ export class BookCard extends LitElement {
               ${this.book.originalLanguage}
             </li>
           </ul>
+
+          ${this.book.available
+            ? html`<button
+                class="btn btn-secondary mt-2 btn-sm"
+                @click="${this.reserveBook}"
+              >
+                Reservar
+              </button>`
+            : ''}
         </div>
       </div>
     `;
